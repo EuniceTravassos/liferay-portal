@@ -10,9 +10,8 @@
  * distribution rights of the Software.
  */
 
-const updateStatus = async (key, name) => {
-	const organizationID = fragmentElement.querySelector('.organizationID')
-		.value;
+const updateFields = async (key, name, mensagemEVP) => {
+	const organizationID = fragmentElement.querySelector('.organizationID').value;
 
 	// eslint-disable-next-line @liferay/portal/no-global-fetch
 	await fetch(`/o/c/evporganizations/${organizationID}`, {
@@ -20,7 +19,8 @@ const updateStatus = async (key, name) => {
 		"organizationStatus":{
 		   "key":"${key}",
 		   "name":"${name}"
-		}
+		},
+		"messageEVPManager": "${mensagemEVP}"
 	 }`,
 		headers: {
 			'content-type': 'application/json',
@@ -31,18 +31,34 @@ const updateStatus = async (key, name) => {
 
 	location.reload();
 };
-
 const openModal = () => {
-	const organizationName = fragmentElement.querySelector('.organizationName')
-		.innerHTML;
+
+	const organizationName = fragmentElement.querySelector('.organizationName').innerHTML;
+
 
 	Liferay.Util.openModal({
+
+		bodyHTML:
+			'<textarea id="messageDescribed" style="word-wrap: break-word;width:100%;height: 10em;resize: none; border-style: inset;border-width: 1px;border-radius: 5px;" placeholder="Describe here..."></textarea>' +
+			'<div id="tooltip" class="alert alert-danger" style="display:none;>Message is required.</div>',
+
+
 		buttons: [
 			{
 				displayType: 'danger',
 				label: 'Reject',
 				async onClick() {
-					await updateStatus('rejected', 'Rejected');
+					const messageDescribed = document.querySelector('#messageDescribed');
+					const tooltip = document.querySelector('#tooltip');
+
+					if (messageDescribed.value === '') {
+						tooltip.style.display = 'block';
+
+					} else {
+						tooltip.style.display = 'none';
+						const textModal = messageDescribed.value;
+						await updateFields('rejected', 'Rejected', textModal);
+					}
 				},
 				type: 'submit',
 			},
@@ -50,16 +66,29 @@ const openModal = () => {
 				displayType: 'success',
 				label: 'Approve',
 				async onClick() {
-					await updateStatus(
-						'awaitingFinanceApproval',
-						'Awaiting Finance Approval'
-					);
+					const messageDescribed = document.querySelector('#messageDescribed');
+					const tooltip = document.querySelector('#tooltip');
+
+					if (messageDescribed.value === '') {
+						tooltip.style.display = 'block';
+
+
+					} else {
+						tooltip.style.display = 'none';
+						const textModal = messageDescribed.value;
+
+						await updateFields(
+							'awaitingFinanceApproval',
+							'Awaiting Finance Approval',
+							textModal
+						);
+					}
 				},
 				type: 'submit',
 			},
 		],
 		center: true,
-		headerHTML: `<p class="headerTextModal">Approve or Reject the organization ${organizationName} </p>`,
+		headerHTML: `<p class="headerTextModal"> Approve or Reject the organization ${organizationName} </p>`,
 		size: 'md',
 	});
 };

@@ -9,6 +9,9 @@
  * distribution rights of the Software.
  */
 
-const requestStatus = document.querySelector('[name="organizationStatus"]');
-
-requestStatus.value = 'awaitingApprovalOnEvp';
+ const requestStatus = document.querySelector('[name="organizationStatus"]');
+ const requestMessegeEVP = document.querySelector('[name="messageEVPManager"]');
+ 
+ requestStatus.value = 'awaitingApprovalOnEvp';
+ 
+ requestMessegeEVP.value = ".";
