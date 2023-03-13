@@ -379,7 +379,33 @@
 			"name": "organizationStatus",
 			"required": false,
 			"type": "String"
-		}
+		},
+        {
+            "indexed": true,
+            "defaultValue": "",
+            "objectFieldSettings": [
+                {
+                    "name": "showCounter",
+                    "value": "true"
+                },
+                {
+                    "name": "maxLength",
+                    "value": "5000"
+                }
+            ],
+            "DBType": "Clob",
+            "label": {
+                "en_US": "MessageEVPManager"
+            },
+            "type": "Clob",
+            "required": true,
+            "indexedAsKeyword": false,
+            "system": false,
+            "indexedLanguageId": "en_US",
+            "name": "messageEVPManager",
+            "state": false,
+            "businessType": "LongText"
+        }
 	],
 	"panelCategoryKey": "control_panel.object",
 	"pluralLabel": {
